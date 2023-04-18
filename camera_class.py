@@ -46,7 +46,8 @@ class camera:
         image_rgb = cv2.cvtColor(image_array, cv2.COLOR_BAYER_RG2RGB)
 
         cv2.imwrite(path_to_save, image_rgb)
-        print("Image saved to: " + path_to_save)
+        return image_rgb
+        # print("Image saved to: " + path_to_save)
 
 
 
