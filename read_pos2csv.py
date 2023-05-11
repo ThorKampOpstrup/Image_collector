@@ -1,8 +1,10 @@
 import rtde_receive
 import rtde_control
 import math
+import time
 
-tcp_offset = [0.032,0,0.045,0,-math.pi/2,0] #!comment this line if it does not work!
+# !comment this line if it does not work!
+tcp_offset = [0.032, 0, 0.045, 0, -math.pi/2, 0]
 
 receiver = rtde_receive.RTDEReceiveInterface("10.42.0.63")
 controller = rtde_control.RTDEControlInterface("10.42.0.63")
@@ -11,8 +13,15 @@ controller = rtde_control.RTDEControlInterface("10.42.0.63")
 # robot.set_tcp_offset(offset=tcp_offset)
 # robot.set_freedrive()
 
-f = open("poses_test.csv", "w")
+f = open("tmp.csv", "w")
 
+controller.teachMode()
+
+while 1:
+    Pose = receiver.getActualTCPPose()
+    #wait 0.1s
+    time.sleep(0.5)
+    print(Pose)
 
 
 while 1:
@@ -28,4 +37,5 @@ while 1:
     Pose = receiver.getActualTCPPose()
     print("adding :", Pose)
     # append pose to file
-    f.write(str(Pose[0]) + ", " + str(Pose[1]) + ", " + str(Pose[2]) + ", " + str(Pose[3]) + ", " + str(Pose[4]) + ", " + str(Pose[5]) + "\n")
+    f.write(str(Pose[0]) + ", " + str(Pose[1]) + ", " + str(Pose[2]) +
+            ", " + str(Pose[3]) + ", " + str(Pose[4]) + ", " + str(Pose[5]) + "\n")

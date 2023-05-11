@@ -6,17 +6,36 @@ class camera:
     tlf = py.TlFactory.GetInstance()
     cam = py.InstantCamera()
 
+    # !COLOR def __init__(self, gain, exposure, light):
+    #     self.cam = py.InstantCamera(self.tlf.CreateFirstDevice())
+    #     print("Using device:", self.cam.GetDeviceInfo().GetModelName())
+    #     self.cam.Open()
+
+    #     self.cam.AcquisitionMode.SetValue('SingleFrame')
+    #     self.cam.ColorTransformationSelector.SetValue('RGBtoRGB')
+    #     self.cam.LightSourceSelector.SetValue(light)
+    #     print("light: " + self.cam.LightSourceSelector.GetValue())
+
+    #     self.cam.PixelFormat.SetValue('BayerRG8')
+    #     print ("Pixel format: " + self.cam.PixelFormat.GetValue())
+
+    #     self.cam.GainRaw.SetValue(gain)
+    #     print("Gain: " + str(self.cam.GainRaw.GetValue()))
+
+    #     self.cam.ExposureTimeAbs.SetValue(exposure)
+    #     print("Exposure: " + str(self.cam.ExposureTimeAbs.GetValue()))
+
     def __init__(self, gain, exposure, light):
         self.cam = py.InstantCamera(self.tlf.CreateFirstDevice())
         print("Using device:", self.cam.GetDeviceInfo().GetModelName())
         self.cam.Open()
 
         self.cam.AcquisitionMode.SetValue('SingleFrame')
-        self.cam.ColorTransformationSelector.SetValue('RGBtoRGB')
-        self.cam.LightSourceSelector.SetValue(light)
-        print("light: " + self.cam.LightSourceSelector.GetValue())
+        # self.cam.ColorTransformationSelector.SetValue('RGBtoRGB')
+        # self.cam.LightSourceSelector.SetValue(light)
+        # print("light: " + self.cam.LightSourceSelector.GetValue())
 
-        self.cam.PixelFormat.SetValue('BayerRG8')
+        # self.cam.PixelFormat.SetValue('BayerRG8')
         print ("Pixel format: " + self.cam.PixelFormat.GetValue())
 
         self.cam.GainRaw.SetValue(gain)

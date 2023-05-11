@@ -1,0 +1,15 @@
+poses = readmatrix('end_poses.csv')
+
+legend on
+rot_vecors = poses(:,4:6);
+
+% calulate angle axis for all rot_vectors
+axan = zeros(length(rot_vecors), 4);
+quat = axan;
+for i = 1:1:length(rot_vecors)
+    axan(i,:) = [rot_vecors(i,:)/norm(rot_vecors(i,:)), norm(rot_vecors(i,:))];
+    q
+end
+
+
+plot(axan)
