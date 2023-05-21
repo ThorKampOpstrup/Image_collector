@@ -77,7 +77,7 @@ class setup:
         file.truncate(0)
         file.close()
 
-        file = open(path_to_save+"names.txt", "a")
+        file = open(path_to_save+"filenames.txt", "a")
         file.truncate(0)
         file.close()
 
@@ -98,29 +98,25 @@ class setup:
 
 
     
-    def show_pose_and_take_pictures(self, path_to_save_images, start_from, poses, speed=0.4, acc=0.5):
-        file = open(path_to_save_images+"names.txt", "a")
+    def show_pose_and_take_pictures(self, path_to_save_images, start_from, object_pose,  poses, speed=0.4, acc=0.5):
+        # file = open(path_to_save_images+"names.txt", "a")
         # get last line
- 
-
-        last_image_number = start_from
-        print ("last_image_number: ", last_image_number)
-
-        print("\n\n\nheeeeeeelpposes: ", poses[0])
-
-        
+        #         
         # show digital twin and pose
-        show_robot_pose_freedrive(poses[0], self.robot)
 
+        print("showing digital twin... show the the robot the pose... Press ctrl+c to continue")
+        show_robot_pose_freedrive(poses[0], self.robot)
         
         positions_file = open(path_to_save_images+"light_positions.txt", "a")
+        filenames = open(path_to_save_images+"filenames.txt", "a")
+        object_pose = object_pose[0][:3]
 
         # take images
-        for pose in poses:
-            print("pose: ", pose)
-            if not self.robot.position_is_obtainable(pose):
+        for i in range(len(poses)):
+            print("pose ", i, ": ", poses[i])
+            if not self.robot.position_is_obtainable(poses[i]):
                 continue
-            pose = self.robot.move_to(pose, speed, acc)
+            pose = self.robot.move_to(poses[i], speed, acc)
             q_config = self.robot.get_joint_values()
             move_robot(q_config)
             # subtract all values from object pose 
@@ -129,16 +125,37 @@ class setup:
             # pose = [x - y for x, y in zip(pose, object_pose)]
             # pose = pose[:3]
             # print("Pose: ", pose)
-            self.camera.take_image(path_to_save_images + "pose_" + str(last_image_number) + ".png")
+            pose = self.robot.receiver.getActualTCPPose()
+            # print("adding :", Pose)
+            # # append pose to file
+            # f.write(str(Pose[0]) + ", " + str(Pose[1]) + ", " + str(Pose[2]) +
+            print("object_pose: ", object_pose)
+            pose = pose[:3]
+            print("Pose: ", pose)
+            pose = [x - y for x, y in zip(pose, object_pose)]
+            print("Pose: " + str(pose))
+            image_number = start_from + i
+            self.camera.take_image(path_to_save_images + "pose_" + str(image_number) + ".png")
             # pose = self.robot.get_actual_tcp_pose()
             positions_file.write(str(pose[0]) + " " + str(pose[1]) + " " + str(pose[2]) +"\n")
-            file = open(path_to_save_images+"names.txt", "a")
-            file.write("pose_" + str(last_image_number) + ".png\n")
-            file.close()
+            filenames.write("pose_" + str(image_number) + ".png\n")
             # print("Image taken from pose: " + str(last_image_number))
-            last_image_number += 1
         
-
+        positions_file.close()
+        filenames.close()
+        
+    def show_livefeat(camera):
+        # show livefeat
+        print("showing livefeat... Press ctrl+c to continue")
+        try:
+            while True:
+                img = camera.get_image()
+                cv.imshow("Livefeat", img)
+        except KeyboardInterrupt:
+            cv.destroyAllWindows()
+            print("KeyboardInterrupt has been caught.")
+    
+        
 
 
         
@@ -152,11 +169,12 @@ class setup:
 
         pose = [float(x) for x in poses[0]]
  
-        # print("pose: " + str(pose))
+        print("pose: ", pose)
         pose = [float(x) for x in pose]
-        self.robot.move_to(pose, 0.4, 0.5)
+        self.robot.controller.moveJ(pose, speed=0.4, acceleration=0.5) ##!this is updated
         input("Confirm that object is NOT present and light is turned on...")
         self.camera.take_image(path_to_save_mask + "mask_without.png")
+        show_livefeat()
         input("Confirm that object is present and light is turned on...")
         self.camera.take_image(path_to_save_mask + "mask_with.png")
 

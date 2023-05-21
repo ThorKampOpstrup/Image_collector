@@ -1,18 +1,18 @@
 import cv2 as cv
 
-path_to_save_mask = "test/pictures/"
+path_to_save_mask = "test/brick/"
 # avg_black = cv.imread("black/avg_black.png", cv.IMREAD_COLOR)
 
-MASK_THREASHOLD = 30
+MASK_THREASHOLD =2
 
-# image_no_object = cv.imread(path_to_save_mask + "mask_without.png", cv.IMREAD_GRAYSCALE)
-image_object = cv.imread(path_to_save_mask + "pose_0.png", cv.IMREAD_GRAYSCALE)
-image_no_object = image_object.copy()
+image_no_object = cv.imread(path_to_save_mask + "mask_without.png", cv.IMREAD_GRAYSCALE)
+image_object = cv.imread(path_to_save_mask + "mask_with.png", cv.IMREAD_GRAYSCALE)
+# image_no_object = image_object.copy()
 
 ##set all values to 0 in image_no_object
-for pixel in image_no_object:
-    for i in range(len(pixel)):
-        pixel[i] = 0
+# for pixel in image_no_object:
+#     for i in range(len(pixel)):
+#         pixel[i] = 0
 
 
 

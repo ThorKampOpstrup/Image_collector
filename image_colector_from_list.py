@@ -10,7 +10,7 @@ from twin import *
 # path_to_list = "poses_test.csv"
 # path_to_list = "poses_test_above.csv"
 path_to_save_list_op_poses = "test.csv"
-mask_position_path = "mask_light_pose.csv"
+mask_position_path = "mask_light_pose.csv" #!# make this file store the Joint values
 # path_to_list = "tcp_test_pose.csv"
 # save_location = "test/"
 save_location = "test/images/"

@@ -1,0 +1,20 @@
+M = readmatrix('../test/end_poses.csv')
+M=M(:,1:3)
+M=M(1:length(M)-1,:)
+
+distances = []
+
+for i=1:length(M)
+    tmp_dist = 10000;
+    for j=i+1:length(M)
+        tmptmpdist = norm(M(i,:) - M(j,:));
+        if tmptmpdist<tmp_dist
+            tmp_dist = tmptmpdist;
+        end
+    end
+    tmp_dist
+    if tmp_dist not
+    distances = [distances, tmp_dist];
+end
+
+plot(distances)

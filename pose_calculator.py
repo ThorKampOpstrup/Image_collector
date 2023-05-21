@@ -32,6 +32,31 @@ def generate_positions_xyz(object_pose, angle, distance, n):
         positions.append([x, y, z])
     return positions
 
+def fibonacci_band_positions(object_pose, min_angle, max_angle, distance, n):
+
+    points = []
+    phi = math.pi * (math.sqrt(5) - 1)
+    # phi = (1+math.sqrt(5))/2
+
+    min_z = math.sin(min_angle)*distance
+    max_z = math.sin(max_angle)*distance
+
+    step_size_z = (max_z-min_z)/float(n)
+
+    for i in range(n):
+        z = min_z+(i*step_size_z)
+
+        radius = math.sqrt(pow(float(distance),2)-pow(float(z),2))
+        theta = phi*i
+
+        x = math.cos(theta) * radius
+        y = math.sin(theta) * radius
+
+        points.append([x+object_pose[0],y+object_pose[1],z+object_pose[2]])
+
+    return points
+
+
 def hom2axan(hom):
     #calculate the angle axis from the homogenous matrix
     rotm = hom[0:3, 0:3]
@@ -135,10 +160,10 @@ def generate_obtainable_end_position(object_pose, light_position, tcp_offset=[0,
     obtainable_position_robot = []
 
     if angle_dif(object_pose, light_position) >= 0:
-        print("right, dif: ",angle_dif(object_pose, light_position))
+        # print("right, dif: ",angle_dif(object_pose, light_position))
         rot = 270
     else:
-        print("left, dif: ",angle_dif(object_pose, light_position))
+        # print("left, dif: ",angle_dif(object_pose, light_position))
         rot = 90
 
     H_tcp = eul2hom(tcp_offset[0:3], tcp_offset[3:6])
