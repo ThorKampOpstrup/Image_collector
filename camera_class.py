@@ -56,6 +56,16 @@ class camera:
         self.cam.LightSourceSelector.SetValue(light)
         print("light: " + self.cam.LightSourceSelector.GetValue())
     
+    def return_image(self):
+        self.cam.StartGrabbing()
+        grab_result = self.cam.RetrieveResult(200)
+        self.cam.StopGrabbing()
+
+        image_array = grab_result.Array
+        image_rgb = cv2.cvtColor(image_array, cv2.COLOR_BAYER_RG2RGB)
+
+        return image_rgb
+    
     def take_image(self, path_to_save):
         self.cam.StartGrabbing()
         grab_result = self.cam.RetrieveResult(200)

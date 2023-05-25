@@ -4,14 +4,15 @@ import math
 import time
 
 # !comment this line if it does not work!
-tcp_offset = [0.032, 0, 0.045, 0, -math.pi/2, 0]
-end_of_shader = [0.032, 0, 0.045, 0, -math.pi/2, 0]
+tcp_offset = [0.035, 0, 0.045, 0, -math.pi/2, 0]
+end_of_shader = [-0.08, 0, 0.045, 0, -math.pi/2, 0]
 
 receiver = rtde_receive.RTDEReceiveInterface("10.42.0.63")
 controller = rtde_control.RTDEControlInterface("10.42.0.63")
 
 
 # robot.set_tcp_offset(offset=end_of_shader)
+controller.setTcp(end_of_shader)
 # robot.set_freedrive()
 
 f = open("tmp.csv", "w")
@@ -19,8 +20,8 @@ f = open("tmp.csv", "w")
 controller.teachMode()
 
 while 1:
-    pose = receiver.getActualTCPPose()
-    # pose = receiver.getActualQ()
+    pose = receiver.getActualTCPPose() #use the one desired
+    # pose = receiver.getActualQ() #use the one desired
     #wait 0.1s
     time.sleep(0.5)
     print(pose)

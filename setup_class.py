@@ -142,23 +142,7 @@ class setup:
             # print("Image taken from pose: " + str(last_image_number))
         
         positions_file.close()
-        filenames.close()
-        
-    def show_livefeat(camera):
-        # show livefeat
-        print("showing livefeat... Press ctrl+c to continue")
-        try:
-            while True:
-                img = camera.get_image()
-                cv.imshow("Livefeat", img)
-        except KeyboardInterrupt:
-            cv.destroyAllWindows()
-            print("KeyboardInterrupt has been caught.")
-    
-        
-
-
-        
+        filenames.close()        
 
     def generate_mask(self, path_to_save_mask, position_of_to_set_light_path):
         MASK_THREASHOLD = 10
@@ -174,7 +158,6 @@ class setup:
         self.robot.controller.moveJ(pose, speed=0.4, acceleration=0.5) ##!this is updated
         input("Confirm that object is NOT present and light is turned on...")
         self.camera.take_image(path_to_save_mask + "mask_without.png")
-        show_livefeat()
         input("Confirm that object is present and light is turned on...")
         self.camera.take_image(path_to_save_mask + "mask_with.png")
 

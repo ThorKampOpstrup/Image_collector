@@ -1,9 +1,9 @@
 import cv2 as cv
 
-path_to_save_mask = "test/brick/"
+path_to_save_mask = "test/holy_metal/"
 # avg_black = cv.imread("black/avg_black.png", cv.IMREAD_COLOR)
 
-MASK_THREASHOLD =2
+MASK_THREASHOLD = 3
 
 image_no_object = cv.imread(path_to_save_mask + "mask_without.png", cv.IMREAD_GRAYSCALE)
 image_object = cv.imread(path_to_save_mask + "mask_with.png", cv.IMREAD_GRAYSCALE)
@@ -38,13 +38,17 @@ mask = cv.absdiff(image_object, image_no_object)
 mask[mask < MASK_THREASHOLD] = 0
 mask[mask >= MASK_THREASHOLD] = 255
 
-# perform opening
-kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (10, 10))
-mask = cv.morphologyEx(mask, cv.MORPH_OPEN, kernel)
 
 # #perform closing
-# kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (40, 40))
+# kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5))
 # mask = cv.morphologyEx(mask, cv.MORPH_CLOSE, kernel)
 
+# # perform opening
+# kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (50, 50))
+# mask = cv.morphologyEx(mask, cv.MORPH_OPEN, kernel)
+
+# # #perform closing
+# kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (100, 100))
+# mask = cv.morphologyEx(mask, cv.MORPH_CLOSE, kernel)
 
 cv.imwrite(path_to_save_mask + "mask.png", mask)

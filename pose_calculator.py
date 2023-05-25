@@ -7,13 +7,13 @@ import numpy as np
 import roboticstoolbox as rtb
 import Analytic_IK as IK
 
-UR5WithTCP =rtb.DHRobot([
-            rtb.RevoluteDH(d=0.089159, alpha=np.pi / 2),
-            rtb.RevoluteDH(a=-0.425),
-            rtb.RevoluteDH(a=-0.39225),
-            rtb.RevoluteDH(d=0.10915, alpha=np.pi / 2),
-            rtb.RevoluteDH(d=0.09465, alpha=-np.pi / 2),
-            rtb.RevoluteDH(d=0.0823)],name="UR5WithTCP")
+# UR5WithTCP =rtb.DHRobot([
+#             rtb.RevoluteDH(d=0.089159, alpha=np.pi / 2),
+#             rtb.RevoluteDH(a=-0.425),
+#             rtb.RevoluteDH(a=-0.39225),
+#             rtb.RevoluteDH(d=0.10915, alpha=np.pi / 2),
+#             rtb.RevoluteDH(d=0.09465, alpha=-np.pi / 2),
+#             rtb.RevoluteDH(d=0.0823)],name="UR5WithTCP")
 
 
 def generate_positions_xyz(object_pose, angle, distance, n):
@@ -159,12 +159,13 @@ def generate_obtainable_end_position(object_pose, light_position, tcp_offset=[0,
 
     obtainable_position_robot = []
 
-    if angle_dif(object_pose, light_position) >= 0:
+    if angle_dif(object_pose, light_position) > 0:
         # print("right, dif: ",angle_dif(object_pose, light_position))
         rot = 270
     else:
         # print("left, dif: ",angle_dif(object_pose, light_position))
         rot = 90
+    # rot = 90
 
     H_tcp = eul2hom(tcp_offset[0:3], tcp_offset[3:6])
     # print("H_tcp: ",H_tcp)
@@ -186,7 +187,7 @@ def generate_obtainable_end_position(object_pose, light_position, tcp_offset=[0,
         obtainable_position_robot = robot_pose
         # print("robot_obj is None pos is: ", robot_pose)
     elif robot_obj.position_is_obtainable(robot_pose):
-        obtainable_position_robot =robot_pose
+        obtainable_position_robot = robot_pose
         # print("position is obtainable: ", robot_pose)
     else:
         print(rot, "position is not obtainable: ",rot , robot_pose)

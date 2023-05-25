@@ -10,34 +10,41 @@ import time
 import pose_calculator as pc
 
 #angle to take pictures from
-min_angle = pi/16 #! ??Is it to low??
+min_angle = pi/4 #! ??Is it to low??
 max_angle = pi/2.5 #! ??Is it to high??
-distance = 0.30
+distance = 0.25
 number_of_images = 100
 
-speed = 3
-acc = 5
+speed = 1
+acc = 1
 
 
-tcp_offset = [0.032, 0, 0.045, 0, -pi/2, 0]
+tcp_offset = [-0.035, 0, 0.045, 0, -pi/2, 0]
 file_of_poses = "auto_poses.csv"
-path_to_save_pictures = "brick/"
+path_to_save_pictures = "peter/"
 mask_position_path = "take_mask_joint_values.csv"
-shutter_param = 1500
+shutter_param = 100000.0
 ip_addr = "10.42.0.63"
 
-def sort_poses(poses):
+def sort_poses(poses, object_pose):
     # take poses with rotation vector
     # return 2 arrays of poses: left and right side
+    object_pos = object_pose[:3]
     left_poses = []
     right_poses = []
     for pose in poses:
-        rot_vec = pose[3:]
-        eul = Rotation.from_rotvec(rot_vec).as_euler('xyz', degrees=True)
-        if eul[0] < 0:
+        angle = pc.angle_dif(object_pose, pose[:3])
+        if angle < 0: #! might need to switch to >0
             left_poses.append(pose)
         else:
             right_poses.append(pose)
+
+        # rot_vec = pose[3:]
+        # eul = Rotation.from_rotvec(rot_vec).as_euler('xyz', degrees=True)
+        # if eul[0] < 0:
+        #     left_poses.append(pose)
+        # else:
+        #     right_poses.append(pose)
 
     return left_poses, right_poses
 
@@ -54,7 +61,7 @@ if __name__ == "__main__":
 
     print("Object pose: ", object_pose)
     
-    # light_poses = pc.generate_positions_xyz(object_pose=object_pose[0], angle=pi/3, distance=0.30, n=50) 
+    # light_poses = pc.generate_positions_xyz(object_pose=object_pose[0], angle=1.39626, distance=0.25, n=100) 
     light_poses = pc.fibonacci_band_positions(object_pose=object_pose[0], min_angle=min_angle, max_angle=max_angle, distance=distance, n=number_of_images)
     print("len light_poses: " + str(len(light_poses)))
 
@@ -77,7 +84,7 @@ if __name__ == "__main__":
     #     end_poses.append([float(i) for i in line])
     # file.close()
 
-    left_poses, right_poses = sort_poses(robot_poses)
+    left_poses, right_poses = sort_poses(robot_poses, object_pose=object_pose[0])
 
     left_poses = sorted(left_poses, key=lambda x:(sqrt(x[0]**2 + x[1]**2 + x[2]**2))) #! sort by distance from base
     right_poses = sorted(right_poses, key=lambda x:(sqrt(x[0]**2 + x[1]**2 + x[2]**2))) #! sort by distance from base

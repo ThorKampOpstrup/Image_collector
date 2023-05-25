@@ -1,3 +1,4 @@
+##Developed in ROVI course 2023 - Jannich Nielsen, Peter Nørris Nielsen, Phillip Marschner, Jacob Brændstrup, Leia Popper & Thor Opstrup
 import math
 import numpy as np
 from numpy import arctan2 as atan2
